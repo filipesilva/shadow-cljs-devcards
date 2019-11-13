@@ -1,13 +1,21 @@
 {:builds
-   {:app
-      {:asset-path "/js",
-       :modules {:main {:init-fn app.core/main}},
-       :output-dir "public/js",
-       :target :browser},
-    :e2e {:ns-regexp "e2e.*", :output-to "out/e2e.js", :target :node-test},
-    :test
-      {:ns-regexp "app.*-spec$", :output-to "out/test.js", :target :node-test}},
- :dependencies [[reagent "0.8.1"]],
- :dev-http {3000 "public"},
- :nrepl {:port 3333},
+ {:app
+  {:asset-path "/js"
+   :modules {:main {:init-fn app.core/main}}
+   :output-dir "public/js"
+   :target :browser}
+  :e2e {:ns-regexp "e2e.*", :output-to "out/e2e.js", :target :node-test}
+  :devcards
+  {:asset-path "/js"
+   :modules {:main {:init-fn app.core-devcard/main}}
+   :compiler-options {:devcards true}
+   :output-dir "public/js"
+   :target :browser}
+  :test
+  {:ns-regexp "app.*-spec$", :output-to "out/test.js", :target :node-test}}
+ :dependencies [[reagent "0.8.1"]
+                [sablono "0.8.6"]
+                [devcards "0.2.6"]]
+ :dev-http {3000 "public"}
+ :nrepl {:port 3333}
  :source-paths ["src" "e2e"]}
