@@ -2,7 +2,7 @@
   (:require
    [cljsjs.react]
    [cljsjs.react.dom]
-   [sablono.core :as sab :include-macros true]
+   [reagent.core :as r :include-macros true]
    [devcards.core :as devcards :include-macros true :refer [defcard]]))
 
 (defn calc-bmi [bmi-data]
@@ -13,13 +13,12 @@
       (assoc data :weight (* bmi h h)))))
 
 (defn slider [bmi-data param value min max]
-  (sab/html
    [:input {:type "range" :value value :min min :max max
             :style {:width "100%"}
             :on-change (fn [e]
                          (swap! bmi-data assoc param (.-target.value e))
                          (when (not= param :bmi)
-                           (swap! bmi-data assoc :bmi nil)))}]))
+                           (swap! bmi-data assoc :bmi nil)))}])
 
 (defn bmi-component [bmi-data]
   (let [{:keys [weight height bmi]} (calc-bmi @bmi-data)
@@ -28,7 +27,6 @@
                            (< bmi 25) ["inherit" "normal"]
                            (< bmi 30) ["orange" "overweight"]
                            :else ["red" "obese"])]
-    (sab/html
      [:div
       [:h3 "BMI calculator"]
       [:div
@@ -40,11 +38,11 @@
       [:div
        [:span (str "BMI: " (int bmi) " ")]
        [:span {:style {:color color}} diagnose]
-       (slider bmi-data :bmi bmi 10 50)]])))
+       (slider bmi-data :bmi bmi 10 50)]]))
 
 (defcard bmi-calculator
   "*Code taken from the Reagent readme.*"
-  (fn [data-atom _] (bmi-component data-atom))
+  (fn [data-atom _] (r/as-element (bmi-component data-atom)))
   {:height 180 :weight 80}
   {:inspect-data true
    :frame true
